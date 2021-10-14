@@ -30,10 +30,10 @@ public class Calculator {
                 break;
             case "/":
                 if (operand2 == 0) {
-                    System.out.println("Вы допустили ошибку при вводе числа. Попробуйте еще раз.");
+                    System.out.println("На ноль делить нельзя! Попробуйте еще раз");
                 } else {
                     System.out.println("Ответ: " + (operand1 / operand2));}
-                    break;
+                    return;
 
 
                 }
