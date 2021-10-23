@@ -39,8 +39,8 @@ public class Array {
         System.out.println(Arrays.toString(arr));
 
 
-        for (int k : arr) {
-            sum = sum + k;
+        for (int j : arr) {
+            sum = sum + j;
         }
         System.out.println();
         System.out.println("Сумма элементов массива равна: " + sum);
