@@ -2,12 +2,12 @@ package com.pb.zelenaja.hm3;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
+
 
 public class Array {
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+
         Random random = new Random();
         int[] arr = new int[10];
         int sum = 0;
@@ -19,6 +19,22 @@ public class Array {
             System.out.print(arr[i] + ", ");
 
         }
+        for (int j : arr) {
+            sum = sum + j;
+        }
+        System.out.println();
+        System.out.println("Сумма элементов массива равна: " + sum);
+
+
+        for (int j : arr) {
+            if (j > 0)
+                count++;
+        }
+
+        System.out.println();
+        System.out.println("Количество положительных элементов массива равна: " + count);
+
+
 
         boolean isSorted = false;
         int buf;
@@ -39,20 +55,7 @@ public class Array {
         System.out.println(Arrays.toString(arr));
 
 
-        for (int j : arr) {
-            sum = sum + j;
-        }
-        System.out.println();
-        System.out.println("Сумма элементов массива равна: " + sum);
 
-
-        for (int j : arr) {
-            if (j > 0)
-                count++;
-        }
-
-        System.out.println();
-        System.out.println("Количество положительных элементов массива равна: " + count);
 
 
     }
