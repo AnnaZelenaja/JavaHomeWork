@@ -11,7 +11,7 @@ public class CapitalLetter {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Введите текст: ");
         String s = reader.readLine();
-        System.out.println(s);
+//        System.out.println(s);
 
 
         String s2 = "";
