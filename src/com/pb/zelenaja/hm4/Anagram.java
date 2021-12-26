@@ -3,10 +3,8 @@ package com.pb.zelenaja.hm4;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import static java.util.Arrays.*;
-
 public class Anagram {
-    
+
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
