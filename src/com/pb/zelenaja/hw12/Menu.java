@@ -13,8 +13,8 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.List;
+import java.io.Serializable;
 
 public class Menu {
 
@@ -36,12 +36,12 @@ public class Menu {
     public static Contacts CreateContact() {
         System.out.println("Введите ФИО\n");
         String name = scanner.next();
-        System.out.println("Введите дату рождения\n");//
-        int dateOfBirth = scanner.nextInt();
-//        System.out.println("Введите месяц рождения\n");
-//        int month = scanner.nextInt();
-//        System.out.println("Введите число рождения\n");
-//        int day = scanner.nextInt();
+        System.out.println("Введите год рождения\n");//
+        int year = scanner.nextInt();
+        System.out.println("Введите месяц рождения\n");
+        int month = scanner.nextInt();
+        System.out.println("Введите число рождения\n");
+        int day = scanner.nextInt();
         ArrayList<String> telList = new ArrayList<>();
         String vvod;
         do {
@@ -53,15 +53,14 @@ public class Menu {
         } while ((vvod.equals("Y")) || vvod.equals("y"));
         System.out.println("Введите адресс\n");
         String address = scanner.next();
-        String[] dt = dateOfBirth.split("-", 0);                                  //
-        Contacts contacts = new Contacts(name, LocalDate.of(Integer.parseInt(dt[0]), Integer.parseInt(dt[1]), Integer.parseInt(dt[2])), telList, address);
+        Contacts contacts = new Contacts(name, LocalDate.of(year, month, day), telList, address);
         return contacts;
     }
 
     public static void main(String[] args) throws Exception {
         ArrayList<Contacts> contact = new ArrayList<>();
         String fileName = "D://Java/Contacts.json";
-        Path fileTelBook = Paths.get(fileName);
+        Path fileTelephoneBook = Paths.get(fileName);
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         SimpleModule module = new SimpleModule();
@@ -83,9 +82,9 @@ public class Menu {
 
         System.out.println("Удаление элемента\n");
         System.out.println("Введите ФИО абонента");
-        String delElement = scanner.next();
+        String contactForDel = scanner.next();
         for (int i = 0; i < contact.size(); i++) {
-            if (delElement.equals(contact.get(i).getName())) {
+            if (contactForDel.equals(contact.get(i).getName())) {
                 contact.remove(i);
             }
         }
@@ -93,15 +92,9 @@ public class Menu {
 
         System.out.println("Поиск абонента");
         System.out.println("Введите ФИО абонента для поиска\n");
-        String contactForDel = scanner.next();
-        boolean flag = true;
-        for (int i = 0; i < contact.size(); i++) {
-            if (contactForDel.equals(contact.get(i).getName())) {
-                System.out.println(contact.get(i));
-                flag = false;
-            }
-        }
-        if (flag) System.out.println("Абонент не найден");
+        String contactFind = scanner.next();
+        contact.stream().filter(x->x.getName().equals(contactFind)).forEach(System.out::println);
+
 
         System.out.println("Вывод всех записей с сортировкой\n");
         System.out.println("Выберите поле для сортировки\n" +
@@ -109,30 +102,15 @@ public class Menu {
                 "2 Сортировать по дате рождения\n");
         String vvod = scanner.next();
         if (vvod.equals("1")) {
-            NameComparator namecomp = new NameComparator();
-            TreeSet<Contacts> people = new TreeSet<>(namecomp);
-            people.addAll(contact);
-            people.forEach(new Consumer<Contacts>() {
-                @Override
-                public void accept(Contacts p) {
-                    System.out.print(p.getName() + " - ");
-                }
-            });
-            System.out.println();
-            System.out.println(people);
+            contact.stream()
+                    .sorted(Comparator.comparing(Contacts::getName))
+                    .forEach(System.out::println);
         } else if (vvod.equals("2")) {
-            BComparator dcomp = new BComparator();
-            TreeSet<Contacts> abonents = new TreeSet<>(dcomp);
-            abonents.addAll(contact);
-            abonents.forEach(new Consumer<Contacts>() {
-                @Override
-                public void accept(Contacts p) {
-                    System.out.print(p.getName() + " - ");
-                }
-            });
-            System.out.println();
-            System.out.println(abonents);
+            contact.stream()
+                    .sorted(Comparator.comparing(Contacts::getDateOfBirth))
+                    .forEach(System.out::println);
         }
+
 
         System.out.println("Редактирование элемента\n");
         System.out.println("Введите номер строки для редактирования\n");
@@ -146,24 +124,24 @@ public class Menu {
         System.out.println("Запись данных в файл\n");
         String personsJson = mapper.writeValueAsString(contact);
         System.out.println(personsJson);
-        try (BufferedWriter writer = Files.newBufferedWriter(fileTelBook)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(fileTelephoneBook)) {
             writer.write(personsJson);
         }
-        catch (Exception ex){
-            ex.printStackTrace();
+        catch (Exception e){
+            e.printStackTrace();
         }
 
         System.out.println("Выгрузка из файла данных");
-        try (BufferedReader reader = Files.newBufferedReader(fileTelBook)) {
+        try (BufferedReader reader = Files.newBufferedReader(fileTelephoneBook)) {
             String strFile="",line;
             while((line = reader.readLine()) != null) {
                 strFile=strFile+line;
             }
             System.out.println("Содержимое телефонной книги из файла.");
-            List<Contacts> contact1 = mapper.readValue(strFile, new TypeReference<List<Contacts>>() {});
-            System.out.println(contact1);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            List<Contacts> cont = mapper.readValue(strFile, new TypeReference<List<Contacts>>() {});
+            System.out.println(cont);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
