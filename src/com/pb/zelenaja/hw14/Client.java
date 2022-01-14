@@ -30,7 +30,7 @@ public class Client {
         }
         pw.close();
         br.close();
-        pw.close();
+        bfr.close();
         socket.close();
     }
 }
